@@ -20,6 +20,8 @@ bool bFPSCap;
 bool bMovieFix;
 int iShadowQuality;
 bool bColourFilter;
+bool bFOVAdjust;
+float fFOVAdjust;
 
 // Variables
 float fDesktopRight;
@@ -34,7 +36,7 @@ void __declspec(naked) FPSCap_CC()
 	__asm
 	{
 		divss xmm1, [FPSCapValue]
-		movaps xmm0,xmm1
+		movaps xmm0, xmm1
 		jmp [FPSCapReturnJMP]
 	}
 }
@@ -46,11 +48,11 @@ void __declspec(naked) MovieFix_CC()
 {
 	__asm
 	{
-		subss xmm1,xmm2
-		addss xmm0,xmm2
+		subss xmm1, xmm2
+		addss xmm0, xmm2
 		movss xmm0, [MovieFixValue1]
 		movss xmm3, [MovieFixValue2]
-		jmp[MovieFixReturnJMP]
+		jmp [MovieFixReturnJMP]
 	}
 }
 
@@ -61,11 +63,35 @@ void __declspec(naked) ShadowQuality_CC()
 	__asm
 	{
 		mov eax, [ShadowQualityValue]
-		add eax,15
+		add eax, 15
 		push esi
-		mov esi,ecx
-		and eax,-16
-		jmp[ShadowQualityReturnJMP]
+		mov esi, ecx
+		and eax, -16
+		jmp [ShadowQualityReturnJMP]
+	}
+}
+
+DWORD FOVNormalReturnJMP;
+void __declspec(naked) FOVNormal_CC()
+{
+	__asm
+	{
+		fld dword ptr[eax + 0x24]
+		fadd [fFOVAdjust]
+		mov eax, [esi + 0x2AC]
+		jmp [FOVNormalReturnJMP]
+	}
+}
+
+DWORD FOVAimingReturnJMP;
+void __declspec(naked) FOVAiming_CC()
+{
+	__asm
+	{
+		fld dword ptr[eax + 0x24]
+		fadd [fFOVAdjust]
+		mov eax, [esi + 0x2B8]
+		jmp [FOVAimingReturnJMP]
 	}
 }
 
@@ -81,6 +107,8 @@ void ReadConfig()
 	bMovieFix = config.GetBoolean("Fix Movies", "Enabled", true);
 	iShadowQuality = config.GetInteger("Shadow Quality", "Value", -1);
 	bColourFilter = config.GetBoolean("Remove Colour Filter", "Enabled", true);
+	bFOVAdjust = config.GetBoolean("Increase FOV", "Enabled", true);
+	fFOVAdjust = config.GetFloat("Increase FOV", "Value", -1);
 
 	RECT desktop;
 	GetWindowRect(GetDesktopWindow(), &desktop);
@@ -91,7 +119,7 @@ void ReadConfig()
 
 void UIFix()
 {
-	if (bFixUI)
+	if (bFixUI && fDesktopAspect > 1.8f)
 	{
 		// re5dx9.exe+1F43DF - 8B 83 E04E0000 - mov eax,[ebx+00004EE0]
 		Memory::PatchBytes((intptr_t)baseModule + 0x1F43DF, "\xB8\x02\x00\x00\x00\x90", 6);
@@ -199,6 +227,33 @@ void ColourFilter()
 	}
 }
 
+void FOVAdjust()
+{
+	if (bFOVAdjust && fFOVAdjust > 0)
+	{
+		// Normal FOV = 45
+		// re5dx9.exe + 44AB92 - D9 40 24 - fld dword ptr[eax + 24]
+		int FOVNormalHookLength = 9;
+		DWORD FOVNormalAddress = (intptr_t)baseModule + 0x44AB92;
+		FOVNormalReturnJMP = FOVNormalAddress + FOVNormalHookLength;
+		Memory::Hook((void*)FOVNormalAddress, FOVNormal_CC, FOVNormalHookLength);
+
+		// Aiming FOV = 33
+		// re5dx9.exe + 44A9DE - D9 40 24 - fld dword ptr[eax + 24]
+		int FOVAimingHookLength = 9;
+		DWORD FOVAimingAddress = (intptr_t)baseModule + 0x44A9DE;
+		FOVAimingReturnJMP = FOVAimingAddress + FOVAimingHookLength;
+		Memory::Hook((void*)FOVAimingAddress, FOVAiming_CC, FOVAimingHookLength);
+
+		// No Weapon FOV = 42
+		//
+
+		#if _DEBUG
+		std::cout << "FOV increased by: " << fFOVAdjust << std::endl;
+		#endif
+	}
+}
+
 
 DWORD __stdcall Main(void*)
 {
@@ -217,6 +272,7 @@ DWORD __stdcall Main(void*)
 	MovieFix();
 	IncreaseQuality();
 	ColourFilter();
+	FOVAdjust();
 
 	return true; // end thread
 }
