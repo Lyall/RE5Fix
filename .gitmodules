@@ -1,0 +1,3 @@
+[submodule "src/external/inih"]
+	path = src/external/inih
+	url = https://github.com/jtilly/inih.git
