@@ -39,5 +39,6 @@ It may not work on other versions until I have implemented signature scanning.
 ## Credits
 [RERevHook](https://www.nexusmods.com/residentevilrevelations/mods/26) for the DLL proxy code. </br>
 [inih](https://github.com/jtilly/inih) for ini reading.
+[FlawlessWidescreen](http://www.flawlesswidescreen.org/)'s RE5 script for info on where to start with UI/Res Limit fix.
 
 
