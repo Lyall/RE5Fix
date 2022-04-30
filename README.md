@@ -20,7 +20,7 @@ It may not work on other versions until I have implemented signature scanning.
 - If you haven't already, go and get [RE5 QOL Fixes.](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339)
 - Downloaded the [latest release](https://github.com/Lyall/RE5Fix/releases) of RE5Fix.
 - Unzip in to the game directory (e.g **steamapps/common/Resident Evil 5**).
-- Edit **RE5Fix.ini** to adjust settings.
+- Edit **RE5Fix.ini** to enable/adjust features.
 
 ## Known Issues
 - FOV adjustment is still a work-in-progress.
