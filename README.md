@@ -1,9 +1,11 @@
 # RE5Fix
-This is DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more.
+This is DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more. <br />
+This fix has been created for and tested with [**RE5 QOL Fixes**.](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339)<br />
+It may not work on other version until I have implemented signature scanning.
 
 ## Features
 ### General
-- FOV adjustment.
+- FOV adjustment (WIP).
 - Uncap FPS.
 - Remove yellow colour filter.
 - Adjust shadow quality.
@@ -15,7 +17,8 @@ This is DLL hook that fixes various issues with Resident Evil 5 relating to ultr
 - Fixed stretched movie playback.
 
 ## Installation
-- Downloaded the [latest release](https://github.com/Lyall/RE5Fix/releases).
+- If you haven't already, go and get [RE5 QOL Fixes.](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339)
+- Downloaded the [latest release](https://github.com/Lyall/RE5Fix/releases) of RE5Fix.
 - Unzip in to the game directory (e.g **steamapps/common/Resident Evil 5**).
 - Edit **RE5Fix.ini** to adjust settings.
 
