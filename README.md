@@ -15,7 +15,6 @@ This is DLL hook that fixes various issues with Resident Evil 5 relating to ultr
 - Fixed stretched movie playback.
 
 ## Installation
-- Recommended: Grab and install [RE5 QOL Fixes.](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339)
 - Downloaded the [latest release](https://github.com/Lyall/RE5Fix/releases) of RE5Fix.
 - Unzip in to the game directory (e.g **steamapps/common/Resident Evil 5**).
 - Edit **RE5Fix.ini** to enable/adjust features.
