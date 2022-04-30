@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp" />
+    <ClCompile Include="src\external\SignatureScanner\SigScanner\SignatureScanner.cpp" />
     <ClCompile Include="src\proxy.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
@@ -29,6 +30,8 @@
     <None Include="src\proxy.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\external\inih\INIReader.h" />
+    <ClInclude Include="src\external\SignatureScanner\SigScanner\SignatureScanner.h" />
     <ClInclude Include="src\helper.hpp" />
     <ClInclude Include="src\stdafx.h" />
   </ItemGroup>

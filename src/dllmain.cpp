@@ -20,6 +20,7 @@ int iFPSCap;
 bool bFPSCap;
 bool bMovieFix;
 int iShadowQuality;
+bool bShadowQuality;
 bool bColourFilter;
 bool bFOVAdjust;
 float fFOVAdjust;
@@ -109,6 +110,7 @@ void ReadConfig()
 	bFPSCap = config.GetInteger("FPS Cap", "Enabled", true);
 	bMovieFix = config.GetBoolean("Fix Movies", "Enabled", true);
 	iShadowQuality = config.GetInteger("Shadow Quality", "Value", -1);
+	bShadowQuality = config.GetBoolean("Shadow Quality", "Enabled", true);
 	bColourFilter = config.GetBoolean("Remove Colour Filter", "Enabled", true);
 	bFOVAdjust = config.GetBoolean("Increase FOV", "Enabled", true);
 	fFOVAdjust = config.GetFloat("Increase FOV", "Value", -1);
@@ -209,7 +211,7 @@ void MovieFix()
 
 void IncreaseQuality()
 {
-	if (iShadowQuality)
+	if (bShadowQuality && iShadowQuality >= 1024)
 	{
 		// re5dx9.exe+252805 - 83 C0 0F              - add eax,0F
 		// Shadow quality. Low=256, Med=512, High=1024.
