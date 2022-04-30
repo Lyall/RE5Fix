@@ -306,8 +306,11 @@ void FOVAdjust()
 		FOVAimingReturnJMP = FOVAimingAddress + FOVAimingHookLength;
 		Memory::Hook((void*)FOVAimingAddress, FOVAiming_CC, FOVAimingHookLength);
 
-		// No Weapon FOV = 42
-		//
+		// No Weapon FOV = 37.5 or 40?
+		// Address of signature = re5dx9.exe + 0x0044AADE
+	    // "\xD9\x5A\x00\xD9\x86\x00\x00\x00\x00\xD9\x1F", "xx?xx????xx"
+		// "D9 5A ? D9 86 ? ? ? ? D9 1F"
+		//intptr_t FOVNoWeapScanResult = scanner.scan("D9 5A ? D9 86 ? ? ? ? D9 1F");
 
 		#if _DEBUG
 		std::cout << "FOV increased by: " << fFOVAdjust << std::endl;
