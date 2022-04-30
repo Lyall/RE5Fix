@@ -23,10 +23,13 @@ This is DLL hook that fixes various issues with Resident Evil 5 relating to ultr
 - FOV adjustment is still a work-in-progress.
 
 ## Screenshots
-![20220430010145_1](https://user-images.githubusercontent.com/695941/166082065-67568c51-8e1e-4cd1-af49-5e956860a47a.jpg)|
-| 21:9 with colour filter removal and adjusted FOV. |
+
+| ![20220430010145_1](https://user-images.githubusercontent.com/695941/166082065-67568c51-8e1e-4cd1-af49-5e956860a47a.jpg) |
 |:--:|
-![re5dx9_2022_04_28_08_07_39_715](https://user-images.githubusercontent.com/695941/165991472-15f70372-551e-45b7-a48c-2323eb52e605.jpg)|
+| 21:9 with colour filter removal and adjusted FOV. |
+
+| ![re5dx9_2022_04_28_08_07_39_715](https://user-images.githubusercontent.com/695941/165991472-15f70372-551e-45b7-a48c-2323eb52e605.jpg) |
+|:--:|
 | 32:9 with working cutscenes! |
 
 
