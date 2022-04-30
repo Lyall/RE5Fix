@@ -1,7 +1,7 @@
 # RE5Fix
 This is DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more. <br />
 This fix has been created for and tested with [**RE5 QOL Fixes**.](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339)<br />
-It may not work on other version until I have implemented signature scanning.
+It may not work on other versions until I have implemented signature scanning.
 
 ## Features
 ### General
