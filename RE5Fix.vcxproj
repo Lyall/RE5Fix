@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="RE5Fix.ini" />
+    <None Include="README.md" />
     <None Include="src\proxy.def" />
   </ItemGroup>
   <ItemGroup>

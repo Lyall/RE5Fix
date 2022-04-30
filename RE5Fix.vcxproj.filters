@@ -40,5 +40,8 @@
     <None Include="RE5Fix.ini">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="README.md">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "./external/inih/INIReader.h"
+#include "./external/SignatureScanner/SigScanner/SignatureScanner.h"
 #include "./helper.hpp"
 #include <stdio.h>
 #include <iostream>
@@ -24,6 +25,8 @@ bool bFOVAdjust;
 float fFOVAdjust;
 
 // Variables
+string procName = "re5dx9.exe";
+SignatureScanner scanner = SignatureScanner((intptr_t)baseModule);
 float fDesktopRight;
 float fDesktopBottom;
 float fDesktopAspect;
@@ -137,11 +140,17 @@ void ResolutionLimits()
 	if (bRemoveResolutionLimit)
 	{
 		//re5dx9.exe + 387B7E - 8B 0D 60982301 - mov ecx, [re5dx9.exe + E39860]
-		int resCap = *(int*)((intptr_t)baseModule + 0xE39860);
-		*(int*)((intptr_t)resCap + 0x50) = (int)131072; // 32 times higher should be enough. Setting to MAX_INT seems to cause issues.
-		*(int*)((intptr_t)resCap + 0x54) = (int)131072;
+
+		// Address of signature = re5dx9.exe + 0x00387B7E
+		//"\x8B\x0D\x00\x00\x00\x00\x8A\x41", "xx????xx"
+		//	"8B 0D ? ? ? ? 8A 41"
+
+		intptr_t resLimitScanResult = (scanner.scan("8B 0D ? ? ? ? 8A 41") + 2);
+		DWORD resLimitAddress = *(DWORD*)*(DWORD*)resLimitScanResult;
+		int resLimitValue1 = *(int*)(resLimitAddress + 0x50) = (int)131072;
+		int resLimitValue2 = *(int*)(resLimitAddress + 0x54) = (int)131072;
 		#if _DEBUG
-		std::cout << "Resolution Limit set to: " << "131072x131072" << std::endl;
+		std::cout << "Resolution limit = " << resLimitValue1 << "x" << resLimitValue2 << std::endl;
 		#endif	
 	}
 }
