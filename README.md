@@ -6,7 +6,7 @@ It may not work on other versions until I have implemented signature scanning.
 ## Features
 ### General
 - FOV adjustment (WIP).
-- Uncap FPS.
+- Uncap 120 FPS limit.
 - Remove yellow colour filter.
 - Adjust shadow quality.
 - Remove 4096x4096 resolution limit.
