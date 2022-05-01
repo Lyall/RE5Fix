@@ -2,7 +2,6 @@
 This is DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more.
 
 ## Features
-### General
 - FOV adjustment (WIP).
 - Uncap 120 FPS limit.
 - Remove yellow colour filter.
