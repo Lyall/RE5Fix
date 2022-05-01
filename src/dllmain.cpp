@@ -24,6 +24,8 @@ bool bShadowQuality;
 bool bColourFilter;
 bool bFOVAdjust;
 float fFOVAdjust;
+int iCustomResX;
+int iCustomResY;
 
 // Variables
 string procName = "re5dx9.exe";
@@ -32,6 +34,7 @@ float fDesktopRight;
 float fDesktopBottom;
 float fDesktopAspect;
 float fNativeAspect = 1.777777791f;
+float fCustomAspect;
 
 DWORD FPSCapReturnJMP;
 float FPSCapValue;
@@ -114,17 +117,21 @@ void ReadConfig()
 	bColourFilter = config.GetBoolean("Remove Colour Filter", "Enabled", true);
 	bFOVAdjust = config.GetBoolean("Increase FOV", "Enabled", true);
 	fFOVAdjust = config.GetFloat("Increase FOV", "Value", -1);
+	iCustomResX = config.GetInteger("Custom Resolution", "Width", -1);
+	iCustomResY = config.GetInteger("Custom Resolution", "Height", -1);
 
 	RECT desktop;
 	GetWindowRect(GetDesktopWindow(), &desktop);
 	fDesktopRight = (float)desktop.right;
 	fDesktopBottom = (float)desktop.bottom;
 	fDesktopAspect = fDesktopRight / fDesktopBottom;
+
+	fCustomAspect = (float)iCustomResX / iCustomResY;
 }
 
 void UIFix()
 {
-	if (bFixUI && fDesktopAspect > 1.8f)
+	if (bFixUI && fDesktopAspect > 1.8f or bFixUI && fCustomAspect > 1.8f)
 	{
 		// re5dx9.exe+1F43DF - 8B 83 E04E0000 - mov eax,[ebx+00004EE0]
 		// Address of signature = re5dx9.exe + 0x001F43DF
@@ -197,7 +204,7 @@ void UncapFPS()
 
 void CrashFix()
 {
-	if (bCrashFix && fDesktopAspect > 1.8f)
+	if (bCrashFix && fDesktopAspect > 1.8f or bCrashFix && fCustomAspect > 1.8f)
 	{
 		// re5dx9.exe+CBEA24 -> 9/16 = 0.5625
 		// Address of signature = re5dx9.exe + 0x00CBEA24
@@ -205,7 +212,16 @@ void CrashFix()
 		// "00 00 10 3F AC"
 		intptr_t CrashFixScanResult = scanner.scan("00 00 10 3F AC");
 
-		float newAR = fDesktopBottom / fDesktopRight; // Backwards, just the way it should be.
+		float newAR = fNativeAspect;
+		if (fCustomAspect > 1.8f)
+		{
+			newAR = (float)iCustomResY / iCustomResX; // Backwards!
+		}
+		else 
+		{
+			newAR = fDesktopBottom / fDesktopRight; // Backwards, just the way it should be.
+		}
+
 		Memory::Write((intptr_t)CrashFixScanResult, newAR);
 
 		#if _DEBUG
@@ -216,7 +232,7 @@ void CrashFix()
 
 void MovieFix()
 {
-	if (bMovieFix && fDesktopAspect > 1.8f)
+	if (bMovieFix && fDesktopAspect > 1.8f or bMovieFix && fCustomAspect > 1.8f)
 	{
 		//re5dx9.exe + 255700 - F3 0F5C CA - subss xmm1, xmm2
 		// Address of signature = re5dx9.exe + 0x00255700
@@ -226,7 +242,15 @@ void MovieFix()
 
 		int MovieFixHookLength = 8;
 		DWORD MovieFixAddress = (intptr_t)MovieFixScanResult;
-		MovieFixValue1 = (float)fNativeAspect / fDesktopAspect;
+		if (fCustomAspect > 1.8f)
+		{
+			MovieFixValue1 = (float)fNativeAspect / fCustomAspect;
+			
+		}
+		else
+		{
+			MovieFixValue1 = (float)fNativeAspect / fDesktopAspect;
+		}
 		MovieFixValue2 = -MovieFixValue1;
 		MovieFixReturnJMP = MovieFixAddress + MovieFixHookLength;
 		Memory::Hook((void*)MovieFixAddress, MovieFix_CC, MovieFixHookLength);
