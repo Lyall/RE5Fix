@@ -22,7 +22,7 @@ This is DLL hook that fixes various issues with Resident Evil 5 relating to ultr
 This fix was primarily created for use with [QOL Fixes](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339) but it **may** work with other versions of RE5.
 
 1. **I get "xlive.dll is missing" error.** <br />
-The included version of GFWL on the Steam version of RE5 does not install properly. Either find an "xlive.dll" from the internet/other game and place it in the game directory or use one of the unofficial patches. <br />
+The included version of GFWL on the Steam version of RE5 does not install properly on Windows 10/11. Either find an "xlive.dll" from the internet/other game and place it in the game directory or use one of the unofficial patches. <br />
 2. **The file "xinput_1_3.dll" conflicts with another mod.** <br />
 You can rename the DLL to "dinput8.dll" or if you are using a mod with a DLL loader then you can just put it in the mod's plugins folder.
 3. **I've tried everything and can't get it to work.** <br />
