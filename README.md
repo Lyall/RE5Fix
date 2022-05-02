@@ -26,7 +26,7 @@ The included version of GFWL on the Steam version of RE5 does not install proper
 2. **The file "xinput_1_3.dll" conflicts with another mod.** <br />
 You can rename the DLL to "dinput8.dll" or if you are using a mod with a DLL loader then you can just put it in the mod's plugins folder.
 3. **I've tried everything and can't get it to work.** <br />
-Install the latest version of RE5 from Steam. Install the [QOL Fixes](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339) mod. Then install RE5Fix.
+Do a clean install of the latest version of RE5 from Steam. Install the [QOL Fixes](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339) mod. Then install RE5Fix.
 
 ## Known Issues
 - FOV adjustment is still a work-in-progress.
