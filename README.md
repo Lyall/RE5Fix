@@ -1,5 +1,5 @@
 # RE5Fix
-This is DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more.
+This is DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more.<br />
 
 ## Features
 - FOV adjustment (WIP).
@@ -17,6 +17,14 @@ This is DLL hook that fixes various issues with Resident Evil 5 relating to ultr
 - Downloaded the [latest release](https://github.com/Lyall/RE5Fix/releases) of RE5Fix.
 - Unzip in to the game directory (e.g **steamapps/common/Resident Evil 5**).
 - Edit **RE5Fix.ini** to enable/adjust features.
+
+## Troubleshooting
+This fix was primarily created for use with [QOL Fixes](https://steamcommunity.com/sharedfiles/filedetails/?id=1533171339) but it **may** work with other versions of RE5.
+
+1. **I get "xlive.dll is missing" error.** <br />
+The included version of GFWL on the steam version of RE5 does not install properly. Either find an "xlive.dll" from the internet/other game and place it in the game directory or use one of the unofficial patches. <br />
+2. **The file "xinput_1_3.dll" conflicts with another mod.** <br />
+You can rename the DLL to "dinput8.dll" or if you are using a mod with a DLL loader then you can just put it in the mod's plugins folder.
 
 ## Known Issues
 - FOV adjustment is still a work-in-progress.
