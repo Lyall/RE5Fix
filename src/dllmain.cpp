@@ -78,27 +78,72 @@ void __declspec(naked) ShadowQuality_CC()
 	}
 }
 
-DWORD FOVNormalReturnJMP;
-void __declspec(naked) FOVNormal_CC()
+DWORD FOV1ReturnJMP;
+void __declspec(naked) FOV1_CC()
 {
 	__asm
 	{
-		fld dword ptr[eax + 0x24]
-		fadd [fFOVAdjust]
-		mov eax, [esi + 0x2AC]
-		jmp [FOVNormalReturnJMP]
+		movss xmm3, [ecx + 0x24]
+		addss xmm3, [fFOVAdjust]
+		mulss xmm3, xmm1
+		movss xmm1, [edx + 0x24]
+		addss xmm1, [fFOVAdjust]
+		jmp [FOV1ReturnJMP]
 	}
 }
 
-DWORD FOVAimingReturnJMP;
-void __declspec(naked) FOVAiming_CC()
+DWORD FOV2ReturnJMP;
+void __declspec(naked) FOV2_CC()
 {
 	__asm
 	{
-		fld dword ptr[eax + 0x24]
+		movss xmm3, [ecx + 0x24]
+		addss xmm3, [fFOVAdjust]
+		mulss xmm3, xmm1
+		movss xmm1, [edx + 0x24]
+		addss xmm1, [fFOVAdjust]
+		jmp [FOV2ReturnJMP]
+	}
+}
+
+
+DWORD FOV3ReturnJMP;
+void __declspec(naked) FOV3_CC()
+{
+	__asm
+	{
+		fld dword ptr[ecx + 0x24]
 		fadd [fFOVAdjust]
-		mov eax, [esi + 0x2B8]
-		jmp [FOVAimingReturnJMP]
+		mov ecx, [ebp + 0x14]
+		fstp dword ptr[ecx]
+		jmp [FOV3ReturnJMP]
+	}
+}
+
+
+DWORD FOV4ReturnJMP;
+void __declspec(naked) FOV4_CC()
+{
+	__asm
+	{
+		fstp dword ptr [edi + 0x08]
+		fld dword ptr [eax + 0x24]
+		fadd [fFOVAdjust]
+		fstp dword ptr [edx]
+		jmp [FOV4ReturnJMP]
+	}
+}
+
+DWORD FOV5ReturnJMP;
+void __declspec(naked) FOV5_CC()
+{
+	__asm
+	{
+		fstp dword ptr [edi + 0x08]
+		fld dword ptr [edx + 0x24]
+		fadd [fFOVAdjust]
+		fstp dword ptr [eax]
+		jmp [FOV5ReturnJMP]
 	}
 }
 
@@ -306,41 +351,68 @@ void FOVAdjust()
 {
 	if (bFOVAdjust && fFOVAdjust > 0)
 	{
-		// Normal FOV = 45
-		// re5dx9.exe + 44AB92 - D9 40 24 - fld dword ptr[eax + 24]
-		// Address of signature = re5dx9.exe + 0x0044AB92
-		// "\xD9\x40\x00\x8B\x86\x00\x00\x00\x00\xD9\x5A\x00\xD9\x00\xD9\x1F\xD9\x40\x00\xD9\x5F\x00\xD9\x40\x00\xD9\x5F\x00\xD9\x40\x00\xD9\x5F\x00\xD9\x40\x00\xD9\x5F\x00\xD9\x40\x00\xD9\x5F\x00\xD9\x40\x00\xD9\x5F\x00\xD9\x40\x00\xD9\x5F\x00\x80\xBE\xB3\x01\x00\x00", "xx?xx????xx?xxxxxx?xx?xx?xx?xx?xx?xx?xx?xx?xx?xx?xx?xx?xx?xxxxxx"
-		// "D9 40 ? 8B 86 ? ? ? ? D9 5A ? D9 00 D9 1F D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? 80 BE B3 01 00 00"
-		intptr_t FOVNormalScanResult = scanner.scan("D9 40 ? 8B 86 ? ? ? ? D9 5A ? D9 00 D9 1F D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? D9 40 ? D9 5F ? 80 BE B3 01 00 00");
+		// FOV 1
+		// Address of signature = re5dx9.exe + 0x0044B173
+		//  "\xF3\x0F\x00\x00\x00\xF3\x0F\x00\x00\xF3\x0F\x00\x00\x00\x8B\x55\x00\xF3\x0F\x00\x00\xF3\x0F\x00\x00\xF3\x0F", "xx???xx??xx???xx?xx??xx??xx"
+		//  "F3 0F ? ? ? F3 0F ? ? F3 0F ? ? ? 8B 55 ? F3 0F ? ? F3 0F ? ? F3 0F"
+		intptr_t FOV1ScanResult = scanner.scan("F3 0F ? ? ? F3 0F ? ? F3 0F ? ? ? 8B 55 ? F3 0F ? ? F3 0F ? ? F3 0F");
 
-		int FOVNormalHookLength = 9;
-		DWORD FOVNormalAddress = (intptr_t)FOVNormalScanResult;
-		FOVNormalReturnJMP = FOVNormalAddress + FOVNormalHookLength;
-		Memory::Hook((void*)FOVNormalAddress, FOVNormal_CC, FOVNormalHookLength);
+		int FOV1HookLength = 14;
+		DWORD FOV1Address = (intptr_t)FOV1ScanResult;
+		FOV1ReturnJMP = FOV1Address + FOV1HookLength;
+		Memory::Hook((void*)FOV1Address, FOV1_CC, FOV1HookLength);
 
-		// Aiming FOV = 33
-		// re5dx9.exe + 44A9DE - D9 40 24 - fld dword ptr[eax + 24]
-		// Address of signature = re5dx9.exe + 0x0044A9DE
-		// "\xD9\x40\x00\x8B\x86\x00\x00\x00\x00\xD9\x9E\x00\x00\x00\x00\xD9\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E\x00\x00\x00\x00\xD9\x40\x00\xD9\x9E", "xx?xx????xx????xxxx????xx?xx????xx?xx????xx?xx????xx?xx????xx?xx????xx?xx????xx?xx"
-		// "D9 40 ? 8B 86 ? ? ? ? D9 9E ? ? ? ? D9 00 D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E"
-		intptr_t FOVAimingScanResult = scanner.scan("D9 40 ? 8B 86 ? ? ? ? D9 9E ? ? ? ? D9 00 D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E ? ? ? ? D9 40 ? D9 9E");
+		// FOV 2
+		// Address of signature = re5dx9.exe + 0x0044B08B
+		//	"\xF3\x0F\x00\x00\x00\xF3\x0F\x00\x00\xF3\x0F\x00\x00\x00\xF3\x0F\x00\x00\xF3\x0F\x00\x00\xF3\x0F\x00\x00\xE9", "xx???xx??xx???xx??xx??xx??x"
+		//	"F3 0F ? ? ? F3 0F ? ? F3 0F ? ? ? F3 0F ? ? F3 0F ? ? F3 0F ? ? E9"
+		intptr_t FOV2ScanResult = scanner.scan("F3 0F ? ? ? F3 0F ? ? F3 0F ? ? ? F3 0F ? ? F3 0F ? ? F3 0F ? ? E9");
 
-		int FOVAimingHookLength = 9;
-		DWORD FOVAimingAddress = (intptr_t)FOVAimingScanResult;
-		FOVAimingReturnJMP = FOVAimingAddress + FOVAimingHookLength;
-		Memory::Hook((void*)FOVAimingAddress, FOVAiming_CC, FOVAimingHookLength);
+		int FOV2HookLength = 14;
+		DWORD FOV2Address = (intptr_t)FOV2ScanResult;
+		FOV2ReturnJMP = FOV2Address + FOV2HookLength;
+		Memory::Hook((void*)FOV2Address, FOV2_CC, FOV2HookLength);
 
-		// No Weapon FOV = 37.5 or 40?
-		// Address of signature = re5dx9.exe + 0x0044AADE
-	    // "\xD9\x5A\x00\xD9\x86\x00\x00\x00\x00\xD9\x1F", "xx?xx????xx"
-		// "D9 5A ? D9 86 ? ? ? ? D9 1F"
-		//intptr_t FOVNoWeapScanResult = scanner.scan("D9 5A ? D9 86 ? ? ? ? D9 1F");
+		// FOV when looking up
+		// Address of signature = re5dx9.exe + 0x0044AF6D
+		//  "\xD9\x41\x00\x8B\x4D\x00\xD9\x19", "xx?xx?xx"
+		//	"D9 41 ? 8B 4D ? D9 19"
+		intptr_t FOV3ScanResult = scanner.scan("D9 41 ? 8B 4D ? D9 19");
+
+		int FOV3HookLength = 8;
+		DWORD FOV3Address = (intptr_t)FOV3ScanResult;
+		FOV3ReturnJMP = FOV3Address + FOV3HookLength;
+		Memory::Hook((void*)FOV3Address, FOV3_CC, FOV3HookLength);
+
+		// FOV when looking down
+		// Address of signature = re5dx9.exe + 0x0044AFAB
+		//	"\xD9\x5F\x00\xD9\x40\x00\xD9\x1A", "xx?xx?xx"
+		//	"D9 5F ? D9 40 ? D9 1A"
+		intptr_t FOV4ScanResult = scanner.scan("D9 5F ? D9 40 ? D9 1A");
+
+		int FOV4HookLength = 8;
+		DWORD FOV4Address = (intptr_t)FOV4ScanResult;
+		FOV4ReturnJMP = FOV4Address + FOV4HookLength;
+		Memory::Hook((void*)FOV4Address, FOV4_CC, FOV4HookLength);
+
+		// I have no idea what I am doing oh god
+		//Address of signature = re5dx9.exe + 0x0044AF33
+		// "\xD9\x5F\x00\xD9\x42\x00\xD9\x18", "xx?xx?xx"
+		//	"D9 5F ? D9 42 ? D9 18"
+
+		intptr_t FOV5ScanResult = scanner.scan("D9 5F ? D9 42 ? D9 18");
+
+		int FOV5HookLength = 8;
+		DWORD FOV5Address = (intptr_t)FOV5ScanResult;
+		FOV5ReturnJMP = FOV5Address + FOV5HookLength;
+		Memory::Hook((void*)FOV5Address, FOV5_CC, FOV5HookLength);
 
 		#if _DEBUG
 		std::cout << "FOV increased by: " << fFOVAdjust << std::endl;
 		#endif
 	}
 }
+
 
 
 DWORD __stdcall Main(void*)
