@@ -45,7 +45,6 @@ Do a clean install of the latest version of RE5 from Steam. Install the [QOL Fix
 ## Credits
 [RERevHook](https://www.nexusmods.com/residentevilrevelations/mods/26) for the DLL proxy code.<br />
 [inih](https://github.com/jtilly/inih) for ini reading.<br />
-[SignatureScanner](https://github.com/Imrglop/SignatureScanner) for signature scanning.<br />
 [FlawlessWidescreen](http://www.flawlesswidescreen.org/)'s RE5 script for info on where to start with UI/Res Limit fix.
 
 
