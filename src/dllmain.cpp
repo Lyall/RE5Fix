@@ -170,7 +170,6 @@ void ReadConfig()
 	fCustomAspect = (float)iCustomResX / iCustomResY;
 }
 
-
 void UIFix()
 {
 	if (bFixUI && fDesktopAspect > 1.8f or bFixUI && fCustomAspect > 1.8f)
@@ -214,7 +213,6 @@ void UIFix()
 			#endif	
 			return;
 		}
-	
 	}
 }
 
@@ -294,7 +292,7 @@ void CrashFix()
 		// Address of signature = re5dx9.exe + 0x00CBEA24
 		// "\x00\x00\x10\x3F\xAC", "xxxxx"
 		// "00 00 10 3F AC"
-		uint8_t* CrashFixScanResult = (Memory::PatternScan(baseModule, "00 ? ? ? 00 00 10 3F ? ?") + 4); // Returns first match
+		uint8_t* CrashFixScanResult = Memory::PatternScan(baseModule, "00 00 10 3F AC"); // Returns first match
 
 		if (CrashFixScanResult)
 		{
@@ -316,7 +314,7 @@ void CrashFix()
 		}
 		else
 		{
-#			if _DEBUG
+			#if _DEBUG
 			std::cout << "CrashFix pattern scan failed." << std::endl;
 			#endif		
 			return;
