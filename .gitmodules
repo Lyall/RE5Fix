@@ -1,6 +1,3 @@
 [submodule "src/external/inih"]
 	path = src/external/inih
 	url = https://github.com/jtilly/inih.git
-[submodule "src/external/SignatureScanner"]
-	path = src/external/SignatureScanner
-	url = https://github.com/Imrglop/SignatureScanner.git
