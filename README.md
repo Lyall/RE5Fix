@@ -1,6 +1,6 @@
 # RE5Fix
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W01UAI9)</br>
-[![Github All Releases](https://img.shields.io/github/downloads/Lyall/RE5Fix/total.svg)]()
+[![Github All Releases](https://img.shields.io/github/downloads/Lyall/RE5Fix/total.svg)](https://github.com/Lyall/RE5Fix/releases)
 
 This is a DLL hook that fixes various issues with Resident Evil 5 relating to ultrawide support and more.<br />
 
